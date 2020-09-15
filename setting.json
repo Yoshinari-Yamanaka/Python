@@ -1,0 +1,22 @@
+{
+    "0": {
+        "source": {
+            "FileName": "source0.csv",
+            "SourceSheetName": "Sheet1"
+        },
+        "target": {
+            "FileName": "target0.json",
+            "TargetSheetName": "Sheet1"
+        }
+    },
+    "1": {
+        "source": {
+            "FileName": "source1.xlsx",
+            "SourceSheetName": "Sheet1"
+        },
+        "target": {
+            "FileName": "target1.csv",
+            "TargetSheetName": "Sheet1"
+        }
+    }
+}

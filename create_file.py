@@ -402,6 +402,41 @@ class AutoWriting:
                     records.append(','.join(map(str, one_record_data)))
                 f.write("\n".join(records))
 
+    def none_to_md(self) -> None:
+        """write something into a MarkDown file without source file"""
+        logger.info(f"setting key : {self.__setting_key}".ljust(20) + f"{sys._getframe().f_code.co_name}".ljust(16) + f"method has been called. line {sys._getframe().f_lineno}")
+
+        os.makedirs(self.__target_dir,exist_ok = True)
+
+        """
+        |  TH  |  TH  |
+        | ---- | ---- |
+        |  TD  |  TD  |
+        |  TD  |  TD  |
+        """
+
+        records = ["1,2,3","4,5,6","7,8,9"]
+        with open(f"{self.__target_dir}/{self.__target_file}","w") as f:
+            md_records = []
+            for row_i,row in enumerate(records):
+                md_row = "| "
+
+                # after writing header
+                if records[1] == row:
+                    md_row += "--- | ".join(
+                        [
+                            "" for _ in range(len(row.split(",")) + 1)
+                        ]
+                    ) + "\n| "
+                
+                # header and body
+                for col_i,column in enumerate(row.split(",")):
+                    md_row += column + " | "
+                md_records.append(md_row)
+
+            f.write("\n".join(md_records))
+
+
 if __name__ == "__main__":
     try:
         SETTING = {}
@@ -507,6 +542,10 @@ if __name__ == "__main__":
                     elif source_file_extension == "orc" and target_file_extension == "csv":
                         futures[key] = executor.submit(auto_writing.orc_to_csv)
                     
+                    # None Source file to Markdown
+                    elif source_file_extension == "none" and target_file_extension == "md":
+                        futures[key] = executor.submit(auto_writing.none_to_md)
+
                     #Invalid
                     else:
                         message = f'Invalid file extension setting key : {key}\n'
